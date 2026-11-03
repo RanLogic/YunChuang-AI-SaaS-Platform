@@ -1,0 +1,95 @@
+
+# ==========================================
+# YunChuang AI SaaS Platform
+# Security and Local Development Exclusions
+# ==========================================
+
+
+# 1. macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+
+# 2. Environment variables and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.secret
+*.credentials
+
+secrets/
+credentials/
+private-keys/
+# Additional private keys and certificates
+.ssh/
+id_rsa
+id_ed25519
+id_ed25519_*
+*.p8
+*.jks
+*.keystore
+
+# 3. Node.js / Next.js build artifacts
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+.turbo/
+.vercel/
+
+
+# 4. Logs and temporary files
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+
+
+# 5. Local databases and business data
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.bak
+
+data/
+local-data/
+customer-data/
+tenant-data/
+production-data/
+
+
+# 6. Infrastructure and deployment secrets
+.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+
+docker-compose.override.yml
+docker-compose.prod.yml
+
+terraform.tfstate
+terraform.tfstate.*
+.terraform/
+
+
+# 7. IDE and editor files
+.vscode/
+.idea/
+*.iml
+
