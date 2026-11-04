@@ -273,3 +273,9 @@ AI 工具参与方案分析与代码执行：
 工程事实按证据区分：源码确认用于说明实现，测试代码用于说明已覆盖的场景，生产验收用于说明实际运行结果。
 
 本仓库仅用于 GitHub Showcase，不包含完整商业产品源码、生产环境配置或敏感数据。
+
+## Engineering Documentation
+
+- [Architecture](docs/architecture/)
+- [Architecture Decision Records (ADR)](docs/adr/)
+- [Engineering Logs](docs/engineering-log/)
