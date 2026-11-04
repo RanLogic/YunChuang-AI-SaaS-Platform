@@ -28,24 +28,13 @@ AI 销售云创工作台面向传统行业企业及其销售团队，将企业�
 
 产品由多个独立技术系统集成组成。原生微信小程序与 Next.js 管理端是两个业务入口，共用一个 Tencent CloudBase 业务数据环境；管理端的管理员认证另有独立 SQLite 存储。
 
-下图按职责区分业务服务、AI 应用编排、模型及模型服务。业务侧实线表示已确认的集成关系；虚线仅表示 AI 能力集成范围，不表示具体模型调用路径。模型与运行服务之间不绘制未经确认的连接。
+### System Architecture
 
-```mermaid
-flowchart TB
-    MP["Native WeChat Mini Program"] --> CF["CloudBase Cloud Functions"]
-    Admin["Platform Admin · Next.js"] --> API["Next.js Server / API Routes"]
-    CF --> CB["共享 Tencent CloudBase 环境"]
-    API --> CB
-    API --> Auth["独立 SQLite · 管理员认证"]
+下图按六层展示系统职责。橙色边界突出贯穿业务服务、数据访问及租户级 AI 资源的治理机制，不代表新增微服务。实线表示已确认的集成关系，灰色虚线仅表示能力关联；模型与运行服务之间不推定具体调用路径。
 
-    subgraph AI["AI 能力组成 · 按职责分层"]
-        App["应用编排：Dify Workflow / Dataset / RAG"]
-        Models["模型：DeepSeek · LLM<br/>Qwen3.8-Flash · 朋友圈内容生成<br/>Qwen3-Embedding 0.6B · 文本向量化"]
-        Runtime["运行与服务：Ollama · 模型运行工具<br/>DashScope · 模型服务相关组成"]
-    end
-    CF -. AI 能力集成 .-> AI
-    API -. AI 能力集成 .-> AI
-```
+![YunChuang AI SaaS Platform 六层系统架构](architecture/system-architecture.svg)
+
+图中文字较多，移动端建议点击图片查看原图。
 
 **基础设施**：腾讯云服务器已部署 Docker、Dify、Ollama、Qwen3-Embedding 0.6B 及 Nginx。上述部署事实与 AI 能力分层分别描述；具体容器划分、网络拓扑及模型调用路径不在图中推定。
 
@@ -56,9 +45,57 @@ flowchart TB
 - **AI Application → Dify / LLM / Embedding**：Dify 承担 Workflow 和 Dataset / RAG 能力；DeepSeek 是系统使用的 LLM，Qwen3.8-Flash 用于朋友圈内容生成，Qwen3-Embedding 0.6B 用于文本向量化。Ollama 提供模型运行能力，DashScope 是模型服务相关组成；具体模型与服务的对应关系不作推定。
 - **Public Content → Generation → Publishing → WeChat Sharing → Analytics**：连接内容生产、公开传播与企业统计，完整链路如下。
 
-**Stage9：已完成生产验收的业务闭环**
+### Stage9 — AI-Powered Public Content Lifecycle
 
-> Industry Insights → Topic Generation → Public Content Generation → Cover Generation → Content Editing → Publishing → Public Page → WeChat Sharing → Anonymous Event Tracking → Enterprise Analytics
+以下十阶段业务链路已完成生产验收。实线表示业务顺序，虚线连接对应工程能力说明。
+
+```mermaid
+flowchart TB
+    subgraph A["Content Intelligence"]
+        direction TB
+        Insights["Industry Insights"] --> Topic["Topic Generation"]
+    end
+    subgraph B["AI Content Production"]
+        direction TB
+        Generate["Public Content Generation"] --> Cover["Cover Generation"]
+        GenNote["Dify Workflow · Server-side Generation<br/>Quota Management · requestId Idempotency"]
+        Generate -.- GenNote
+    end
+    subgraph C["Content Management"]
+        direction TB
+        Edit["Content Editing"] --> Publish["Publishing"]
+        EditNote["Original / Current<br/>Content Persistence"]
+        PubNote["Publication Authorization"]
+        Edit -.- EditNote
+        Publish -.- PubNote
+    end
+    subgraph D["Public Distribution"]
+        direction TB
+        Page["Public Page"] --> Share["WeChat Moments Sharing"]
+    end
+    subgraph E["Analytics Feedback"]
+        direction TB
+        Track["Anonymous Event Tracking"] --> Analytics["Enterprise Analytics"]
+        TrackNote["PV / UV · Share Events"]
+        AnalyticsNote["Enterprise Data Dashboard"]
+        Track -.- TrackNote
+        Analytics -.- AnalyticsNote
+    end
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+
+    classDef stage fill:#eff6ff,stroke:#3b82f6,color:#182b45
+    classDef note fill:#f8fafc,stroke:#cbd5e1,color:#52647a,stroke-dasharray:4 4
+    class Insights,Topic,Generate,Cover,Edit,Publish,Page,Share,Track,Analytics stage
+    class GenNote,EditNote,PubNote,TrackNote,AnalyticsNote note
+    style A fill:#f8fafc,stroke:#cbd5e1
+    style B fill:#ecfdf5,stroke:#6ee7b7
+    style C fill:#fffbeb,stroke:#fcd34d
+    style D fill:#eff6ff,stroke:#93c5fd
+    style E fill:#f5f3ff,stroke:#c4b5fd
+```
 
 从行业洞察出发，完成选题、正文和封面生成，经编辑与发布形成公开页面；微信分享后的匿名事件回流至企业分析，支持 PV / UV 与分享统计。该链路已完成生产闭环，朋友圈分享回流已验收。
 

@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1650" viewBox="0 0 1280 1650" role="img" aria-labelledby="title desc">
+<title id="title">YunChuang AI SaaS Platform — System Architecture</title>
+<desc id="desc">Six responsibility layers with independent Mini Program and Admin entry points, shared CloudBase business data, separate SQLite administrator authentication, tenant governance, Dify knowledge and workflows, models, runtime services, and infrastructure. Lines show only confirmed integration or capability association.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/></marker></defs>
+<style>text{font-family:Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#182b45}.title{font-size:29px;font-weight:700}.subtitle{font-size:15px;fill:#52647a}.layer{font-size:18px;font-weight:700}.small{font-size:14px;fill:#52647a}.cardtitle{font-size:18px;font-weight:700}.body{font-size:16px}.wire{fill:none;stroke:#64748b;stroke-width:2;marker-end:url(#arrow)}.assoc{stroke-dasharray:6 5}</style>
+<rect width="1280" height="1650" rx="16" fill="#f8fafc"/>
+<text x="40" y="50" class="title">YunChuang AI SaaS Platform</text>
+<text x="40" y="78" class="subtitle">SYSTEM ARCHITECTURE / 系统分层与多租户治理</text>
+<path d="M 750 45 H 800" class="wire"/><text x="815" y="50" class="small">Confirmed integration</text>
+<path d="M 750 72 H 800" class="wire assoc"/><text x="815" y="77" class="small">Capability association · not a direct call</text>
+
+<rect x="32" y="104" width="1216" height="177" rx="12" fill="white" stroke="#3b82f6" stroke-width="1.5"/>
+<rect x="32" y="104" width="8" height="177" rx="4" fill="#3b82f6"/>
+<text x="54" y="133" class="layer">L1  Business Interface Layer</text>
+<rect x="85" y="150" width="535" height="110" rx="9" fill="#eff6ff" stroke="#dbe3ed"/>
+<text x="103" y="179" class="cardtitle">WeChat Mini Program</text>
+<text x="103" y="207" class="body">Native WeChat Mini Program</text>
+<text x="103" y="232" class="body">面向销售人员</text>
+<rect x="660" y="150" width="535" height="110" rx="9" fill="#eff6ff" stroke="#dbe3ed"/>
+<text x="678" y="179" class="cardtitle">Platform Admin</text>
+<text x="678" y="207" class="body">Next.js · React · TypeScript · Ant Design</text>
+<text x="678" y="232" class="body">面向平台运营和管理人员</text>
+<rect x="32" y="307" width="1216" height="162" rx="12" fill="white" stroke="#06b6d4" stroke-width="1.5"/>
+<rect x="32" y="307" width="8" height="162" rx="4" fill="#06b6d4"/>
+<text x="54" y="336" class="layer">L2  Application &amp; Service Layer</text>
+<rect x="85" y="352" width="535" height="96" rx="9" fill="#ecfeff" stroke="#dbe3ed"/>
+<text x="103" y="381" class="cardtitle">Mini Program Backend</text>
+<text x="103" y="409" class="body">CloudBase Cloud Functions</text>
+<rect x="660" y="352" width="535" height="96" rx="9" fill="#ecfeff" stroke="#dbe3ed"/>
+<text x="678" y="381" class="cardtitle">Platform Admin Backend</text>
+<text x="678" y="409" class="body">Next.js Server / API Routes</text>
+<path d="M 352 260 V 352" class="wire"/>
+<path d="M 927 260 V 352" class="wire"/>
+<rect x="32" y="495" width="1216" height="241" rx="12" fill="white" stroke="#f59e0b" stroke-width="1.5"/>
+<rect x="32" y="495" width="8" height="241" rx="4" fill="#f59e0b"/>
+<text x="54" y="524" class="layer">L3  Identity, Authorization &amp; Tenant Governance</text>
+<rect x="85" y="540" width="345" height="175" rx="9" fill="#fffbeb" stroke="#dbe3ed"/>
+<text x="103" y="569" class="cardtitle">WeChat Identity</text>
+<text x="103" y="597" class="body">cloud.getWXContext().OPENID</text>
+<text x="103" y="622" class="body">Server-side identity resolution</text>
+<text x="103" y="647" class="body">微信可信身份 · 服务端解析</text>
+<rect x="448" y="540" width="365" height="175" rx="9" fill="#fffbeb" stroke="#dbe3ed"/>
+<text x="466" y="569" class="cardtitle">Multi-Tenant Isolation</text>
+<text x="466" y="597" class="body">tenant_id · 业务数据隔离维度</text>
+<text x="466" y="622" class="body">Tenant status / Permission validation</text>
+<text x="466" y="647" class="body">Tenant-level AI configuration</text>
+<text x="466" y="672" class="body">服务端校验 · 租户级资源边界</text>
+<rect x="831" y="540" width="364" height="175" rx="9" fill="#fffbeb" stroke="#dbe3ed"/>
+<text x="849" y="569" class="cardtitle">Admin Authentication</text>
+<text x="849" y="597" class="body">SQLite · 独立认证存储</text>
+<text x="849" y="622" class="body">Argon2id · TOTP MFA</text>
+<text x="849" y="647" class="body">Session Management</text>
+<text x="849" y="672" class="body">与微信身份体系分别呈现</text>
+<path d="M 1160 448 V 486 H 1215 V 625 H 1195" class="wire"/>
+<rect x="32" y="762" width="1216" height="227" rx="12" fill="white" stroke="#8b5cf6" stroke-width="1.5"/>
+<rect x="32" y="762" width="8" height="227" rx="4" fill="#8b5cf6"/>
+<text x="54" y="791" class="layer">L4  Data &amp; Knowledge Layer</text>
+<rect x="85" y="808" width="535" height="156" rx="9" fill="#f5f3ff" stroke="#dbe3ed"/>
+<text x="103" y="837" class="cardtitle">Shared Business Data</text>
+<text x="103" y="865" class="body">Tencent CloudBase Database</text>
+<text x="103" y="890" class="body">Tencent CloudBase Storage</text>
+<text x="103" y="915" class="body">两个业务入口共享同一 CloudBase 环境</text>
+<rect x="660" y="808" width="535" height="156" rx="9" fill="#f5f3ff" stroke="#dbe3ed"/>
+<text x="678" y="837" class="cardtitle">Enterprise Knowledge &amp; RAG</text>
+<text x="678" y="865" class="body">Dify Dataset · Enterprise Knowledge</text>
+<text x="678" y="890" class="body">Embedding → Retrieval</text>
+<text x="678" y="915" class="body">Knowledge Source References</text>
+<path d="M 85 400 H 48 V 878 H 85" class="wire"/>
+<path d="M 1195 400 H 1230 V 751 H 638 V 878 H 620" class="wire"/>
+<rect x="32" y="1015" width="1216" height="269" rx="12" fill="white" stroke="#10b981" stroke-width="1.5"/>
+<rect x="32" y="1015" width="8" height="269" rx="4" fill="#10b981"/>
+<text x="54" y="1044" class="layer">L5  AI Application &amp; Model Layer</text>
+<rect x="85" y="1061" width="345" height="200" rx="9" fill="#ecfdf5" stroke="#dbe3ed"/>
+<text x="103" y="1090" class="cardtitle">AI Application Orchestration</text>
+<text x="103" y="1118" class="body">Dify Workflow</text>
+<text x="103" y="1143" class="body">Topic Generation</text>
+<text x="103" y="1168" class="body">Public Content Generation</text>
+<rect x="448" y="1061" width="365" height="200" rx="9" fill="#ecfdf5" stroke="#dbe3ed"/>
+<text x="466" y="1090" class="cardtitle">AI Models</text>
+<text x="466" y="1118" class="body">DeepSeek · 系统 LLM</text>
+<text x="466" y="1143" class="body">Qwen3.8-Flash</text>
+<text x="466" y="1168" class="body">  朋友圈内容生成</text>
+<text x="466" y="1193" class="body">Qwen3-Embedding 0.6B</text>
+<text x="466" y="1218" class="body">  文本向量化</text>
+<rect x="831" y="1061" width="364" height="200" rx="9" fill="#ecfdf5" stroke="#dbe3ed"/>
+<text x="849" y="1090" class="cardtitle">Model Runtime &amp; Services</text>
+<text x="849" y="1118" class="body">Ollama · 模型运行工具</text>
+<text x="849" y="1143" class="body">DashScope · 模型服务相关组成</text>
+<text x="849" y="1168" class="body">不推定模型与服务的对应调用</text>
+<path d="M 927 964 V 1002 H 258 V 1061" class="wire assoc"/>
+<rect x="22" y="297" width="1236" height="997" rx="16" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="32" y="1310" width="1216" height="168" rx="12" fill="white" stroke="#64748b" stroke-width="1.5"/>
+<rect x="32" y="1310" width="8" height="168" rx="4" fill="#64748b"/>
+<text x="54" y="1339" class="layer">L6  Infrastructure Layer</text>
+<rect x="85" y="1356" width="1110" height="100" rx="9" fill="#f1f5f9" stroke="#dbe3ed"/>
+<text x="103" y="1385" class="cardtitle">Confirmed infrastructure components</text>
+<text x="103" y="1413" class="body">Tencent Cloud · Docker · Nginx · Dify Server · Ollama</text>
+<text x="103" y="1438" class="body">基础设施组成；不表示容器拓扑、网络连接或服务器资源关系</text>
+<text x="40" y="1514" class="layer">橙色虚线边界：租户治理贯穿服务端、业务数据访问与租户级 AI 资源。</text>
+<text x="40" y="1543" class="small">它是现有系统内的治理机制，不代表独立微服务；SQLite 与共享 CloudBase 是独立存储边界。</text>
+<text x="40" y="1576" class="small">关系说明：实线仅表示确认的业务集成；灰色虚线表示知识检索与 AI 编排的能力关联。</text>
+<text x="40" y="1605" class="small">职责分层不等同于部署拓扑；模型、运行服务之间未绘制未经确认的调用路径。</text>
+</svg>
